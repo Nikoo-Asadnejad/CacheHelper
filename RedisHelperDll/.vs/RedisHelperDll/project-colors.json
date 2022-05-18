@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "bca110b7-d35a-41f2-bebb-db9098261bbd": {
+      "ProjectGuid": "bca110b7-d35a-41f2-bebb-db9098261bbd",
+      "DisplayName": "RedisHelperDll",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
