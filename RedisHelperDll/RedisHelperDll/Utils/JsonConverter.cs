@@ -10,7 +10,7 @@ namespace RedisHelperDll.Utils
 {
   public static class JsonConverter
   {
-    public static string Serialize<T>(this T obj)
+    public static string Serialize(this object obj)
     => JsonConvert.SerializeObject(obj);
 
     public static T Deserialize<T>(this string json)

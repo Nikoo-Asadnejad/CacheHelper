@@ -22,8 +22,8 @@ namespace RedisHelperDll.RedisExtension
  
     public async static Task SetRecordAsync(this IDistributedCache cache,
       string key , object data,
-      TimeSpan? expirationDuration,
-      TimeSpan? unusedExpirationDuration)
+      TimeSpan? expirationDuration = null,
+      TimeSpan? unusedExpirationDuration = null)
     {
       DistributedCacheEntryOptions options = GenerateCacheOptions(expirationDuration,unusedExpirationDuration).Result;
       cache.SetString(key, data.Serialize() ,options);
@@ -39,8 +39,8 @@ namespace RedisHelperDll.RedisExtension
     /// <param name="unusedExpirationDuration">Cache would be expired if it is not used during this time</param>
     public async static Task SetRecordsListAsync(this IDistributedCache cache,
       Dictionary<string, object> records,
-      TimeSpan? expirationDuration,
-      TimeSpan? unusedExpirationDuration)
+      TimeSpan? expirationDuration = null,
+      TimeSpan? unusedExpirationDuration = null)
     {
       foreach(var record in records)
       {
