@@ -11,17 +11,34 @@ namespace RedisHelperDll.RedisExtension
 {
   public static class Cacher
   {
-    public async static Task SetRecordAsync<T>(this IDistributedCache cache,
-      string key , T data,
+    /// <summary>
+    /// Save a record in redis db
+    /// </summary>
+    /// <param name="cache">IDistributedCache</param>
+    /// <param name="key">A key for our data</param>
+    /// <param name="data">Our data to cache</param>
+    /// <param name="expirationDuration">Cache would automaticly be expired after this time</param>
+    /// <param name="unusedExpirationDuration">Cache would be expired if it is not used during this time</param>
+ 
+    public async static Task SetRecordAsync(this IDistributedCache cache,
+      string key , object data,
       TimeSpan? expirationDuration,
       TimeSpan? unusedExpirationDuration)
     {
       DistributedCacheEntryOptions options = GenerateCacheOptions(expirationDuration,unusedExpirationDuration).Result;
-      cache.SetString(key, data.Serialize<T>() ,options);
+      cache.SetString(key, data.Serialize() ,options);
     }
 
-    public async static Task SetRecordsListAsync<T>(this IDistributedCache cache,
-      Dictionary<string, T> records,
+    /// <summary>
+    /// Save a List of records in redis db
+    /// Save each records of dictionary as a key,value pairs in redis
+    /// </summary>
+    /// <param name="cache">IDistributedCache</param>
+    /// <param name="records">A Dictionary type which contains keies and data to cache</param>
+    /// <param name="expirationDuration">Cache would automaticly be expired after this time</param>
+    /// <param name="unusedExpirationDuration">Cache would be expired if it is not used during this time</param>
+    public async static Task SetRecordsListAsync(this IDistributedCache cache,
+      Dictionary<string, object> records,
       TimeSpan? expirationDuration,
       TimeSpan? unusedExpirationDuration)
     {
@@ -31,16 +48,34 @@ namespace RedisHelperDll.RedisExtension
       }
     }
 
-    public async static Task GetRecordAsync<T>(this IDistributedCache cache,
-      string key, T data)
+    /// <summary>
+    /// Get the value of the key parameter
+    /// </summary>
+    /// <typeparam name="T">Type of data we want to retrive from db </typeparam>
+    /// <param name="cache">IDistributedCache</param>
+    /// <param name="key">The key of record in db</param>
+
+    /// <returns></returns>
+    public async static Task<T> GetRecordAsync<T>(this IDistributedCache cache,
+      string key)
     => cache.GetStringAsync(key).Result.Deserialize<T>();
 
-    public async static Task GetRecordsListAsync<T>(this IDistributedCache cache, Dictionary<string, T> records)
+    /// <summary>
+    /// Get a List of Records in db which match the keis 
+    /// </summary>
+    /// <typeparam name="T">Type of data we want retrive from db</typeparam>
+    /// <param name="cache">IDistributedCache</param>
+    /// <param name="keies">List of kies we want their data</param>
+    /// <returns>A Dictionary Type of kies and their value</returns>
+    public async static Task<Dictionary<string, T>> GetRecordsListAsync<T>(this IDistributedCache cache,IList<string> keies)
     {
-      foreach (var record in records)
+      var result = new Dictionary<string ,T>();
+      foreach (var key in keies)
       {
-        await cache.GetRecordAsync(record.Key, record.Value);
+        var data = await cache.GetRecordAsync<T>(key);
+        result.Add(key, data);
       }
+      return result;
     }
 
 
