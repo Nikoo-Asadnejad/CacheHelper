@@ -77,6 +77,10 @@
               "target": "Package",
               "version": "[13.0.1, )"
             },
+            "Redis.OM": {
+              "target": "Package",
+              "version": "[0.1.9, )"
+            },
             "StackExchange.Redis": {
               "target": "Package",
               "version": "[2.5.61, )"
