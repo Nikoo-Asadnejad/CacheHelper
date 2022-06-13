@@ -78,6 +78,18 @@ namespace RedisHelperDll.RedisExtension
       return result;
     }
 
+    public async static Task Update(this IDistributedCache cache,
+      string key, object data,
+      TimeSpan? expirationDuration = null,
+      TimeSpan? unusedExpirationDuration = null)
+    {
+      var record = cache.GetAsync(key);
+      if(record != null)
+      {
+        await cache.RemoveAsync(key);
+      }
+      await cache.SetRecordAsync(key, data, expirationDuration, unusedExpirationDuration);
+    }
 
     private static async Task<DistributedCacheEntryOptions> GenerateCacheOptions(TimeSpan? expirationDuration , TimeSpan? unusedExpirationDuration)
     {
