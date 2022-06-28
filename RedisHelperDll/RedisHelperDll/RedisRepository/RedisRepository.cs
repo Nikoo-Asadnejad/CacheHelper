@@ -11,6 +11,9 @@ using Redis.OM;
 
 namespace RedisHelperDll.Repository;
 
+//This class uses Redis Stack , and works with redis.om packages
+//It will help to store datas in redis stack in documents format , and applys queries on them
+//The model which will be passed to this class should have been decoreted with redis.om attributes
 public class RedisRepository<T> where T : class
 {
     private readonly IConfiguration _config;

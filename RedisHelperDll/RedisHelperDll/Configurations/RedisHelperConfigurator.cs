@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RedisHelperDll.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace RedisHelperDll.Configurations
     {
       services.AddStackExchangeRedisCache(options =>
       options.Configuration = configuration["RedisConnection"]);
+
+      services.AddTransient(typeof(IRedisRepository<>), typeof(RedisRepository<>));
     }
   }
 }

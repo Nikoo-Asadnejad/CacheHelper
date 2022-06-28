@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace RedisHelperDll.RedisExtension
 {
+  //This class is used for simple redis caching , it saves the data as key value pairs
+  //Just by running redis you can use this class
   public static class RedisCacher
   {
     /// <summary>
@@ -54,7 +56,6 @@ namespace RedisHelperDll.RedisExtension
     /// <typeparam name="T">Type of data we want to retrive from db </typeparam>
     /// <param name="cache">IDistributedCache</param>
     /// <param name="key">The key of record in db</param>
-
     /// <returns></returns>
     public async static Task<T> GetRecordAsync<T>(this IDistributedCache cache,
       string key)
