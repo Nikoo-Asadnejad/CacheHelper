@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RedisHelperDll.RedisExtension
 {
-  public static class Cacher
+  public static class RedisCacher
   {
     /// <summary>
     /// Save a record in redis db
@@ -67,14 +67,10 @@ namespace RedisHelperDll.RedisExtension
     /// <param name="cache">IDistributedCache</param>
     /// <param name="keies">List of kies we want their data</param>
     /// <returns>A Dictionary Type of kies and their value</returns>
-    public async static Task<Dictionary<string, T>> GetRecordsListAsync<T>(this IDistributedCache cache,IList<string> keies)
+    public async static Task<Dictionary<string, T>> GetRecordsListAsync<T>(this IDistributedCache cache,List<string> keies)
     {
-      var result = new Dictionary<string ,T>();
-      foreach (var key in keies)
-      {
-        var data = await cache.GetRecordAsync<T>(key);
-        result.Add(key, data);
-      }
+      Dictionary<string, T> result = new ();
+      keies.ForEach(async key => result.Add(key,await cache.GetRecordAsync<T>(key)));
       return result;
     }
 
