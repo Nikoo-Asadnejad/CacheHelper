@@ -58,7 +58,13 @@ namespace RedisHelperDll.Attributes
     }
 
     private string GenerateKeyFromRequestUrl(HttpRequest context)
-     => context.Host + context.Path + context.QueryString;
+    {
+      var key = context.Host + context.Path + context.QueryString;
+      if (context.Body is not null && context.Method is not "GET")
+        key += context.Body.GetHashCode();
+    }
+
+     
     
   }
 }
