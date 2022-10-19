@@ -48,10 +48,8 @@ namespace RedisHelperDll.Attributes
       {
         var executedContect = await next();
         if(executedContect.Result is OkObjectResult okObjectResult )
-        {
-          await cache.SetRecordAsync(cacheKey, okObjectResult.Value.Serialize(), TimeSpan.FromSeconds(_expireTime));
-         
-        }
+          cache.SetRecordAsync(cacheKey, okObjectResult.Value.Serialize(), TimeSpan.FromSeconds(_expireTime));
+        
       }
       
 
@@ -62,6 +60,8 @@ namespace RedisHelperDll.Attributes
       var key = context.Host + context.Path + context.QueryString;
       if (context.Body is not null && context.Method is not "GET")
         key += context.Body.GetHashCode();
+
+      return key;
     }
 
      
