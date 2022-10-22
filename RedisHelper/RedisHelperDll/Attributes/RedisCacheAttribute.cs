@@ -33,7 +33,7 @@ namespace RedisHelperDll.Attributes
       string cacheData = await cache.GetRecordAsync<string>(cacheKey);
 
 
-      if (string.IsNullOrEmpty(cacheData))
+      if (!string.IsNullOrEmpty(cacheData))
       {
         
         var contentResult = new ContentResult
