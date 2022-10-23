@@ -21,14 +21,14 @@ namespace RedisHelperDll.RedisExtension
     /// <param name="data">Our data to cache</param>
     /// <param name="expirationDuration">Cache would automaticly be expired after this time</param>
     /// <param name="unusedExpirationDuration">Cache would be expired if it is not used during this time</param>
- 
+
     public async static Task SetRecordAsync(this IDistributedCache cache,
-      string key , object data,
+      string key, object data,
       TimeSpan? expirationDuration = null,
       TimeSpan? unusedExpirationDuration = null)
     {
-      DistributedCacheEntryOptions options = GenerateCacheOptions(expirationDuration,unusedExpirationDuration).Result;
-      cache.SetString(key, data.Serialize() ,options);
+      DistributedCacheEntryOptions options = GenerateCacheOptions(expirationDuration, unusedExpirationDuration).Result;
+      cache.SetString(key, data.Serialize(), options);
     }
 
     /// <summary>
@@ -44,9 +44,9 @@ namespace RedisHelperDll.RedisExtension
       TimeSpan? expirationDuration = null,
       TimeSpan? unusedExpirationDuration = null)
     {
-      foreach(var record in records)
+      foreach (var record in records)
       {
-         await cache.SetRecordAsync(record.Key, record.Value, expirationDuration, unusedExpirationDuration);
+        await cache.SetRecordAsync(record.Key, record.Value, expirationDuration, unusedExpirationDuration);
       }
     }
 
@@ -68,10 +68,10 @@ namespace RedisHelperDll.RedisExtension
     /// <param name="cache">IDistributedCache</param>
     /// <param name="keies">List of kies we want their data</param>
     /// <returns>A Dictionary Type of kies and their value</returns>
-    public async static Task<Dictionary<string, T>> GetRecordsListAsync<T>(this IDistributedCache cache,List<string> keies)
+    public async static Task<Dictionary<string, T>> GetRecordsListAsync<T>(this IDistributedCache cache, List<string> keies)
     {
-      Dictionary<string, T> result = new ();
-      keies.ForEach(async key => result.Add(key,await cache.GetRecordAsync<T>(key)));
+      Dictionary<string, T> result = new();
+      keies.ForEach(async key => result.Add(key, await cache.GetRecordAsync<T>(key)));
       return result;
     }
 
@@ -81,14 +81,36 @@ namespace RedisHelperDll.RedisExtension
       TimeSpan? unusedExpirationDuration = null)
     {
       var record = cache.GetAsync(key);
-      if(record != null)
+      if (record != null)
       {
         await cache.RemoveAsync(key);
       }
       await cache.SetRecordAsync(key, data, expirationDuration, unusedExpirationDuration);
     }
 
-    private static async Task<DistributedCacheEntryOptions> GenerateCacheOptions(TimeSpan? expirationDuration , TimeSpan? unusedExpirationDuration)
+
+    public async static Task<T> GetOrSet<T>(this IDistributedCache cache,
+      string key, object data, Func<Task<T>> func,
+      TimeSpan? expirationDuration = null,
+      TimeSpan? unusedExpirationDuration = null)
+    {
+      var cachedData = await cache.GetRecordAsync<T>(key);
+      if (cachedData is not null)
+        return cachedData;
+      else
+      {
+        var getData = await func();
+        if (getData is null)
+          return default(T);
+
+        cache.SetRecordAsync(key, getData, expirationDuration, unusedExpirationDuration);
+        return getData;
+
+      }
+
+    }
+
+    private static async Task<DistributedCacheEntryOptions> GenerateCacheOptions(TimeSpan? expirationDuration, TimeSpan? unusedExpirationDuration)
     {
       DistributedCacheEntryOptions options = new();
       options.AbsoluteExpirationRelativeToNow = expirationDuration == null ? TimeSpan.FromSeconds(60) : expirationDuration;
