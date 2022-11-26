@@ -21,7 +21,6 @@ namespace RedisHelperDll.RedisExtension
     /// <param name="data">Our data to cache</param>
     /// <param name="expirationDuration">Cache would automaticly be expired after this time</param>
     /// <param name="unusedExpirationDuration">Cache would be expired if it is not used during this time</param>
-
     public async static Task SetRecordAsync(this IDistributedCache cache,
       string key, object data,
       TimeSpan? expirationDuration = null,
@@ -75,6 +74,15 @@ namespace RedisHelperDll.RedisExtension
       return result;
     }
 
+    /// <summary>
+    /// Updates the cache value
+    /// </summary>
+    /// <param name="cache"></param>
+    /// <param name="key"></param>
+    /// <param name="data"></param>
+    /// <param name="expirationDuration"></param>
+    /// <param name="unusedExpirationDuration"></param>
+    /// <returns></returns>
     public async static Task Update(this IDistributedCache cache,
       string key, object data,
       TimeSpan? expirationDuration = null,
@@ -88,8 +96,19 @@ namespace RedisHelperDll.RedisExtension
       await cache.SetRecordAsync(key, data, expirationDuration, unusedExpirationDuration);
     }
 
-
-    public async static Task<T> GetOrSet<T>(this IDistributedCache cache,
+    /// <summary>
+    /// Gets the data from cache if it exists ,
+    /// otherwise will retrive it from the fuction and store it in the cache
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="cache"></param>
+    /// <param name="key"></param>
+    /// <param name="data"></param>
+    /// <param name="func"></param>
+    /// <param name="expirationDuration"></param>
+    /// <param name="unusedExpirationDuration"></param>
+    /// <returns></returns>
+    public async static Task<T> GetOrSetRecordAsync<T>(this IDistributedCache cache,
       string key, object data, Func<Task<T>> func,
       TimeSpan? expirationDuration = null,
       TimeSpan? unusedExpirationDuration = null)
