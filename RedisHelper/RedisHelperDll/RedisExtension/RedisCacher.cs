@@ -83,7 +83,7 @@ namespace RedisHelperDll.RedisExtension
     /// <param name="expirationDuration"></param>
     /// <param name="unusedExpirationDuration"></param>
     /// <returns></returns>
-    public async static Task Update(this IDistributedCache cache,
+    public async static Task UpdateAsync(this IDistributedCache cache,
       string key, object data,
       TimeSpan? expirationDuration = null,
       TimeSpan? unusedExpirationDuration = null)
@@ -94,6 +94,26 @@ namespace RedisHelperDll.RedisExtension
         await cache.RemoveAsync(key);
       }
       await cache.SetRecordAsync(key, data, expirationDuration, unusedExpirationDuration);
+    }
+
+    /// <summary>
+    /// Updates list of  cache value
+    /// </summary>
+    /// <param name="cache"></param>
+    /// <param name="key"></param>
+    /// <param name="data"></param>
+    /// <param name="expirationDuration"></param>
+    /// <param name="unusedExpirationDuration"></param>
+    /// <returns></returns>
+    public async static Task UpdateListAsync(this IDistributedCache cache,
+      Dictionary<string, object> keyValues,
+      TimeSpan? expirationDuration = null,
+      TimeSpan? unusedExpirationDuration = null)
+    {
+      foreach (var keyValue in keyValues)
+      {
+        await cache.UpdateAsync(keyValue.Key, keyValue.Value, expirationDuration, unusedExpirationDuration);
+      }
     }
 
     /// <summary>
