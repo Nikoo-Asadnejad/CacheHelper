@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "feQXFM+QPvO8VMotrXnxU4skcCc+5JdlU0ofNGkAU6oKT1qLMnMcF9bWc2zVu4Xzh1aV6mPszLZf6FKae2PgNg==",
+  "dgSpecHash": "N/FXtl1KCnmxUupnsnREFToFCNoXFY7F7XY/oYkce2y3UkhkCja94naBCdZfDHFwiXUbJC6iaSeqVdzOACnCmQ==",
   "success": true,
-  "projectFilePath": "D:\\web development\\projects\\RedisHelperDll\\RedisHelper\\RedisHelperDll\\RedisHelperDll.csproj",
+  "projectFilePath": "D:\\web development\\projects\\RedisHelperDll\\RedisHelper\\CacheHelper\\CacheHelper.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Asus\\.nuget\\packages\\microsoft.aspnet.webapi.client\\5.2.8\\microsoft.aspnet.webapi.client.5.2.8.nupkg.sha512",
     "C:\\Users\\Asus\\.nuget\\packages\\microsoft.aspnet.webapi.core\\5.2.8\\microsoft.aspnet.webapi.core.5.2.8.nupkg.sha512",
