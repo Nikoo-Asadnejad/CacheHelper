@@ -42,6 +42,7 @@ namespace RedisHelperDll.Attributes
           ContentType = "application/json;charset=UTF-8",
         };
         context.Result = contentResult;
+        context.HttpContext.Response.Headers.Add("FromCache", "True");
         return;
       }
       else

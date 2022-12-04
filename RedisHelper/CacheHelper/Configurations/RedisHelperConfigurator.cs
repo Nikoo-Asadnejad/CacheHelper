@@ -7,12 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace RedisHelperDll.Configurations
 {
   public static class RedisHelperConfigurator
   {
     public static void InjectServices(IServiceCollection services, IConfiguration configuration)
     {
+      //services.AddMemoryCache();
       services.AddStackExchangeRedisCache(options =>
       options.Configuration = configuration["RedisConnection"]);
 
