@@ -149,6 +149,12 @@ namespace RedisHelperDll.RedisExtension
 
     }
 
+    public async static Task RemoveAsync(this IDistributedCache cache,
+      string key)
+      => await cache.RemoveAsync(key);
+
+    public async static Task RemoveListAsync(this IDistributedCache cache, List<string> keies)
+      => keies.ForEach(async key => await cache.RemoveAsync(key));
     private static async Task<DistributedCacheEntryOptions> GenerateCacheOptions(TimeSpan? expirationDuration, TimeSpan? unusedExpirationDuration)
     {
       DistributedCacheEntryOptions options = new();
